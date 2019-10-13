@@ -1,0 +1,1518 @@
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <stdio.h>
+#include <conio.h>
+#include <windows.h>
+class Stock;
+//tampilan
+int nmr=0;
+int l=0;
+char kunci[2];
+void tamilan_utama();
+void tampilan_utama_garis(int x,int y);
+void tampilan_utama_up();
+void tampilan_utama_down();
+void tampilan_admin_up();
+void tampilan_admin_down();
+void tampilan_utama_up_copy();
+void tampilan_utama_down_copy();
+void tampilan_admin_down_copy(char a[3]);
+void tampilan_admin_up_copy();
+void clrscrr();
+void tampilan_user_down();
+void tampilan_user_down_copy(char a[3]);
+
+//txt
+void input_login(char name[25],char pasword[25]);
+
+//covert
+double convert_double(char a[100]);
+
+void login(char zz[3]);
+void daftar();
+
+void tambah_barang();
+void edit_barang();
+void hapus_barang();
+void cari_barang();
+void lihat_barang(char a[3]);
+void lihat_barang(int q);
+void panggil_cetak(Stock s[],int y,int h);
+void cetak_barang(Stock s[],int y,int h);
+
+void pilih_utama();
+void pilih_admin_down();
+void pilih_user_down();
+
+void tambah_keranjang();
+void edit_keranjang();
+void hapus_keranjang();
+
+void judul_login_admin();
+void judul_login_user();
+void judul_daftar_user();
+void judul_lihat_data();
+void judul_tambah_data();
+void judul_edit_data();
+void judul_hapus_data();
+void judul_cari_data();
+void judul_logout();
+void judul_admin();
+void judul_user();
+
+
+void cetak_judul(char a[],char b[],char c[],char d[],char e[]);
+void hapus_judul();
+
+class Barang{
+	private:
+      char id_barang[25];
+   	char nama_barang[25];
+      double harga_barang;
+      double stock;
+      char jenis_barang[25];
+   public:
+      void set_id_barang(char a[3]){
+      	strcpy(id_barang,a);
+      }
+      void set_nama_barang(char a[25]){
+      	strcpy(nama_barang,a);
+      }
+      void set_harga_barang(double a){
+      	harga_barang=a;
+      }
+      void set_stock(double a){
+      	stock=a;
+      }
+      void set_jenis_barang(char a[25]){
+      	strcpy(jenis_barang,a);
+      }
+      char* get_id_barang(){
+      	return id_barang;
+      }
+      char* get_nama_barang(){
+      	return nama_barang;
+      }
+      double get_harga_barang(){
+      	return harga_barang;
+      }
+      double get_stock(){
+      	return stock;
+      }
+      char* get_jenis_barang(){
+      	return jenis_barang;
+      }
+
+};
+class Stock: public Barang{
+  public:
+  		void tambah_stock(){
+      	ofstream newemployee("stock.txt", ios::app);
+ 			newemployee << get_id_barang() << ' ' << get_nama_barang() << ' ' << get_harga_barang() << ' ' << get_stock() << ' ' << get_jenis_barang() << endl;
+ 			newemployee.close();
+
+      }
+      void edit_stock(char a[25],char b[25],double c,double d,char e[24]){
+      	char id_barang[25];
+   		char nama_barang[25];
+      	double harga_barang;
+      	double stock;
+         char jenis_barang[25];
+         ofstream newemployee("stock.txt", ios::app);
+         ifstream employee("stock.txt");
+         int z=0;
+         Stock s[100];
+         while (employee >> id_barang >> nama_barang >> harga_barang >> stock >> jenis_barang){
+          	if(strcmp(a,id_barang)==0){
+          		s[z].set_id_barang(a);
+      			s[z].set_nama_barang(b);
+      			s[z].set_harga_barang(c);
+      			s[z].set_stock(d);
+      			s[z].set_jenis_barang(e);
+      		}
+      		else{
+          		s[z].set_id_barang(id_barang);
+      			s[z].set_nama_barang(nama_barang);
+      			s[z].set_harga_barang(harga_barang);
+      			s[z].set_stock(stock);
+      			s[z].set_jenis_barang(jenis_barang);
+      		}
+            z++;
+   		}
+         ofstream out("stock.txt");
+         out.open("stock.txt", ios::out);
+         out.open("stock.txt", ios::trunc);
+         out.close();
+   		for(int a=0;a<z;a++){
+   		  	newemployee << s[a].get_id_barang() << ' ' << s[a].get_nama_barang() << ' ' << s[a].get_harga_barang() << ' ' << s[a].get_stock() << ' ' << s[a].get_jenis_barang() << endl;
+ 			}
+         newemployee.close();
+     		employee.close();
+      }
+      void hapus_stock(char a[25]){
+         char id_barang[25];
+   		char nama_barang[25];
+      	double harga_barang;
+      	double stock;
+         char jenis_barang[25];
+         ofstream newemployee("stock.txt", ios::app);
+         ifstream employee("stock.txt");
+         int z=0;
+         Stock s[100];
+         while (employee >> id_barang >> nama_barang >> harga_barang >> stock >> jenis_barang){
+          	if(strcmp(a,id_barang)==0)continue;
+         	s[z].set_id_barang(id_barang);
+            s[z].set_nama_barang(nama_barang);
+            s[z].set_harga_barang(harga_barang);
+            s[z].set_stock(stock);
+            s[z].set_jenis_barang(jenis_barang);
+            z++;
+   		}
+         ofstream out("stock.txt");
+         out.open("stock.txt", ios::out);
+         out.open("stock.txt", ios::trunc);
+         out.close();
+   		for(int a=0;a<z;a++){
+   		  	newemployee << s[a].get_id_barang() << ' ' << s[a].get_nama_barang() << ' ' << s[a].get_harga_barang() << ' ' << s[a].get_stock() << ' ' << s[a].get_jenis_barang() << endl;
+ 			}
+         newemployee.close();
+     		employee.close();
+      }
+      void cari_stock(){
+
+      }
+      void lihat_stock(){
+      	ifstream employee("stock.txt");
+         char id_barang[25];
+   		char nama_barang[25];
+      	double harga_barang;
+      	double stock;
+         char jenis_barang[25];
+         Stock s[100];
+         int z=0;
+         while (employee >> id_barang >> nama_barang >> harga_barang >> stock >> jenis_barang){
+         	s[z].set_id_barang(id_barang);
+            s[z].set_nama_barang(nama_barang);
+            s[z].set_harga_barang(harga_barang);
+            s[z].set_stock(stock);
+            s[z].set_jenis_barang(jenis_barang);
+            z++;
+     		}
+         employee.close();
+         int y=z/20;
+   		int x=z%20;
+         if(x>0){
+   			y++;
+   		}
+         nmr=y;
+         int r=z;
+         if(z>20){
+            panggil_cetak(s,y,r);
+         }else{
+            lihat_barang(z+1);
+            for(int a=0;a<z;a++){
+   				if(a%2==0)textcolor(8);
+      			else textcolor(9);
+      			gotoxy(41+16,23+a);cprintf("%s",s[a].get_id_barang());
+      			gotoxy(54+16,23+a);cprintf("%s",s[a].get_nama_barang());
+      			gotoxy(80+16,23+a);cprintf("  Rp.%.f",s[a].get_harga_barang());
+      			gotoxy(99+16,23+a);cprintf("  %.f",s[a].get_stock());
+      			gotoxy(111+16,23+a);cprintf("%s",s[a].get_jenis_barang());
+            }
+            getch();
+            if(strcmp(kunci,"1")==0)
+            lihat_barang("1");
+            else if(strcmp(kunci,"2")==0)
+            lihat_barang("2");
+      	}
+   	}
+      void cari_merk(char a[25]){
+      	ifstream employee("stock.txt");
+         char id_barang[25];
+   		char nama_barang[25];
+      	double harga_barang;
+      	double stock;
+         char jenis_barang[25];
+         Stock s[100];
+         int z=0;
+         while (employee >> id_barang >> nama_barang >> harga_barang >> stock >> jenis_barang){
+         	if(strcmp(a,jenis_barang)==0){
+         	s[z].set_id_barang(id_barang);
+            s[z].set_nama_barang(nama_barang);
+            s[z].set_harga_barang(harga_barang);
+            s[z].set_stock(stock);
+            s[z].set_jenis_barang(jenis_barang);
+            z++;
+            }
+     		}
+         employee.close();
+         int y=z/20;
+   		int x=z%20;
+         if(x>0){
+   			y++;
+   		}
+         nmr=y;
+         int r=z;
+         if(z>20){
+            panggil_cetak(s,y,r);
+         }else{
+            lihat_barang(z+1);
+            for(int a=0;a<z;a++){
+   				if(a%2==0)textcolor(8);
+      			else textcolor(9);
+      			gotoxy(41+16,23+a);cprintf("%s",s[a].get_id_barang());
+      			gotoxy(54+16,23+a);cprintf("%s",s[a].get_nama_barang());
+      			gotoxy(80+16,23+a);cprintf("  Rp.%.f",s[a].get_harga_barang());
+      			gotoxy(99+16,23+a);cprintf("  %.f",s[a].get_stock());
+      			gotoxy(111+16,23+a);cprintf("%s",s[a].get_jenis_barang());
+            }
+            getch();
+            if(strcmp(kunci,"1")==0)
+            lihat_barang("1");
+            else if(strcmp(kunci,"2")==0)
+            lihat_barang("2");
+      	}
+   	}
+      void cari_nama(char a[25]){
+      	ifstream employee("stock.txt");
+         char id_barang[25];
+   		char nama_barang[25];
+      	double harga_barang;
+      	double stock;
+         char jenis_barang[25];
+         Stock s[100];
+         int z=0;
+         while (employee >> id_barang >> nama_barang >> harga_barang >> stock >> jenis_barang){
+         	if(strcmp(a,nama_barang)==0){
+         	s[z].set_id_barang(id_barang);
+            s[z].set_nama_barang(nama_barang);
+            s[z].set_harga_barang(harga_barang);
+            s[z].set_stock(stock);
+            s[z].set_jenis_barang(jenis_barang);
+            z++;
+            }
+     		}
+         employee.close();
+         int y=z/20;
+   		int x=z%20;
+         if(x>0){
+   			y++;
+   		}
+         nmr=y;
+         int r=z;
+         if(z>20){
+            panggil_cetak(s,y,r);
+         }else{
+            lihat_barang(z+1);
+            for(int a=0;a<z;a++){
+   				if(a%2==0)textcolor(8);
+      			else textcolor(9);
+      			gotoxy(41+16,23+a);cprintf("%s",s[a].get_id_barang());
+      			gotoxy(54+16,23+a);cprintf("%s",s[a].get_nama_barang());
+      			gotoxy(80+16,23+a);cprintf("  Rp.%.f",s[a].get_harga_barang());
+      			gotoxy(99+16,23+a);cprintf("  %.f",s[a].get_stock());
+      			gotoxy(111+16,23+a);cprintf("%s",s[a].get_jenis_barang());
+            }
+            getch();
+            if(strcmp(kunci,"1")==0)
+            lihat_barang("1");
+            else if(strcmp(kunci,"2")==0)
+            lihat_barang("2");
+      	}
+   	}
+      void cari_id(char a[25]){
+      	ifstream employee("stock.txt");
+         char id_barang[25];
+   		char nama_barang[25];
+      	double harga_barang;
+      	double stock;
+         char jenis_barang[25];
+         Stock s[100];
+         int z=0;
+         while (employee >> id_barang >> nama_barang >> harga_barang >> stock >> jenis_barang){
+         	if(strcmp(a,id_barang)==0){
+         	s[z].set_id_barang(id_barang);
+            s[z].set_nama_barang(nama_barang);
+            s[z].set_harga_barang(harga_barang);
+            s[z].set_stock(stock);
+            s[z].set_jenis_barang(jenis_barang);
+            z++;
+            }
+     		}
+         employee.close();
+         int y=z/20;
+   		int x=z%20;
+         if(x>0){
+   			y++;
+   		}
+         nmr=y;
+         int r=z;
+         if(z>20){
+            panggil_cetak(s,y,r);
+         }else{
+            lihat_barang(z+1);
+            for(int a=0;a<z;a++){
+   				if(a%2==0)textcolor(8);
+      			else textcolor(9);
+      			gotoxy(41+16,23+a);cprintf("%s",s[a].get_id_barang());
+      			gotoxy(54+16,23+a);cprintf("%s",s[a].get_nama_barang());
+      			gotoxy(80+16,23+a);cprintf("  Rp.%.f",s[a].get_harga_barang());
+      			gotoxy(99+16,23+a);cprintf("  %.f",s[a].get_stock());
+      			gotoxy(111+16,23+a);cprintf("%s",s[a].get_jenis_barang());
+            }
+            getch();
+            if(strcmp(kunci,"1")==0)
+            lihat_barang("1");
+            else if(strcmp(kunci,"2")==0)
+            lihat_barang("2");
+      	}
+   	}
+};
+void menu_cari(){
+	l=0;
+	clrscrr();
+	char pilih[2],pilih1[25]; Stock s;
+	gotoxy(55,14);printf("1.Cari By Id");
+   gotoxy(55+17,14);printf("2.Cari By Nama");
+   gotoxy(55+17+19,14);printf("3.Cari By Merk");
+   gotoxy(55+17+19+19,14);printf("4. Kembali");
+   gotoxy(55+17+19+19+16,14);printf("Cari By(no) : ");
+	gets(pilih);
+   if(strcmp(pilih,"1")==0){
+   	gotoxy(90,16);printf("Masukan Id Barang : ");gets(pilih1);
+      s.cari_id(pilih1);
+   }
+   else if(strcmp(pilih,"2")==0){
+   	gotoxy(88,16);printf("Masukan Nama Barang : ");gets(pilih1);
+      s.cari_nama(pilih1);
+   }
+   else if(strcmp(pilih,"3")==0){
+   	gotoxy(88,16);printf("Masukan Merk Barang : ");gets(pilih1);
+   	s.cari_merk(pilih1);
+   }
+   else if(strcmp(pilih,"4")==0){
+   	lihat_barang(kunci);
+   }
+}
+void panggil_cetak(Stock s[],int w,int f){
+	clrscrr();
+   if(f>20)
+   lihat_barang(21);
+   else
+   lihat_barang(f+1);
+	cetak_barang(s,w-1,f);
+	char pilih[2];
+   gotoxy(54,16);printf("Masukan Pilihan : ");gets(pilih);
+   if(strcmp(pilih,"3")==0 && w!=1){
+   	panggil_cetak(s,w-1,f-20);
+   }
+   else if(strcmp(pilih,"4")==0 && w!=nmr){
+      if(w>1)l-=40;
+   	else l-=20;
+   	panggil_cetak(s,w+1,f+20);
+   }
+   else if(strcmp(pilih,"1")==0){
+   	l=0;
+      nmr=0;
+   	if(strcmp(kunci,"1")==0){
+      	tampilan_admin_up_copy();
+      	tampilan_admin_down();
+      }
+      else if(strcmp(kunci,"2")==0){
+      	tampilan_admin_up_copy();
+      	tampilan_user_down();
+      }
+   }
+   else if(strcmp(pilih,"2")==0){
+   	menu_cari();
+   }
+}
+void cetak_barang(Stock s[],int w,int f){
+	if(f>20)f=20;
+	for(int a=0;a<f;a++){
+   	if(a%2==0)textcolor(8);
+      else textcolor(9);
+      gotoxy(41+16,23+a);cprintf("%s",s[l].get_id_barang());
+      gotoxy(54+16,23+a);cprintf("%s",s[l].get_nama_barang());
+      gotoxy(80+16,23+a);cprintf("  Rp.%.f",s[l].get_harga_barang());
+      gotoxy(99+16,23+a);cprintf("  %.f",s[l].get_stock());
+      gotoxy(111+16,23+a);cprintf("%s",s[l].get_jenis_barang());
+   	l+=1;
+   }
+   if(f<20)l-=f;
+   if(strcmp(kunci,"1")==0){
+   gotoxy(63,14);printf("1.Menu Admin");
+   }else if(strcmp(kunci,"2")==0){
+   gotoxy(63,14);printf("1.Menu User");
+   }gotoxy(65+16,14);printf("2.Cari Barang");
+   if(f==20){
+   	gotoxy(85+13,14);printf("3.Lanjut");
+	}if(l!=20 && w!=nmr || (l==20 && f!=20)){
+   	gotoxy(102+13,14);printf("4. Kembali");
+	}
+}
+class Keranjang:Barang{
+
+	protected:
+   	int bayar;
+   	void tambah_keranjang(){
+
+      }
+      void Edit_keranjang(){
+
+      }
+      void hapus_keranjang(){
+
+      }
+      int jumlah(){
+
+      }
+};
+
+struct data{
+	char Uusername[25],Upaswoard[25];
+}; data oop[1000];
+
+
+
+void cetak_judul(char a[],char b[],char c[],char d[],char e[]){
+	int y=1,x=0;
+   for(int z=0;z<strlen(a);z++){
+   	if(z%2==0){
+   	gotoxy(45+x,5);printf("%c",a[x]); Sleep(1);
+      gotoxy(45+x,6);printf("%c",b[x]); Sleep(1);
+      gotoxy(45+x,7);printf("%c",c[x]); Sleep(1);
+      gotoxy(45+x,8);printf("%c",d[x]); Sleep(1);
+      gotoxy(45+x,9);printf("%c",e[x]); Sleep(1);
+      x++;
+      }
+      else{
+      gotoxy(45+strlen(a)-y,5);printf("%c",a[strlen(a)-y]); Sleep(1);
+      gotoxy(45+strlen(a)-y,6);printf("%c",b[strlen(a)-y]); Sleep(1);
+      gotoxy(45+strlen(a)-y,7);printf("%c",c[strlen(a)-y]); Sleep(1);
+      gotoxy(45+strlen(a)-y,8);printf("%c",d[strlen(a)-y]); Sleep(1);
+      gotoxy(45+strlen(a)-y,9);printf("%c",e[strlen(a)-y]); Sleep(1);
+      y++;
+      }
+   }
+}
+void hapus_judul(){
+   for(int z=0;z<121;z++){
+   	gotoxy(45+z,5);printf(" ");
+      gotoxy(45+z,6);printf(" ");
+      gotoxy(45+z,7);printf(" ");
+      gotoxy(45+z,8);printf(" ");
+      gotoxy(45+z,9);printf(" ");
+   }
+
+}
+void clrscrr(){
+     for(int a=2;a<141;a++){
+     	for(int b=0;b<44;b++){
+   		gotoxy(27+a,13+b);printf(" ");
+       }
+     }
+}
+void judul_login_admin(){
+	hapus_judul();
+	char a[]="LL        OOOOO    GGGGGGG  III  NNNN    NN       AAAA    DDDDD     MM        MM  III  NNNN     NN ";
+   char b[]="LL       O     O   GG       III  NN NN   NN     AA    AA  DD   DD   MMMM    MMMM  III  NN NN    NN ";
+   char c[]="LL      O       O  GG GGGG  III  NN  NN  NN     AAAAAAAA  DD    DD  MM  MM MM MM  III  NN  NN   NN ";
+   char d[]="LL       O     O   GG   GG  III  NN   NN NN     AA    AA  DD   DD   MM    M   MM  III  NN   NN  NN ";
+   char e[]="LLLLLL    OOOOO    GGGGGGG  III  NN    NNNN     AA    AA  DDDDD     MM        MM  III  NN     NNNN ";
+   cetak_judul(a,b,c,d,e);
+}
+
+void judul_login_user(){
+   hapus_judul();
+	char a[]="LL       OOOOO    GGGGGGG  III  NNNN    NN     UU   UU  SSSSS  EEEEEE  RRRRRR  ";
+   char b[]="LL      O     O   GG       III  NN NN   NN     UU   UU  SS     EE      RR   RR ";
+   char c[]="LL     O       O  GG GGGG  III  NN  NN  NN     UU   UU  SSSSS  EEEEEE  RRRRR   ";
+   char d[]="LL      O     O   GG   GG  III  NN   NN NN     UU   UU     SS  EE      RR  RR  ";
+   char e[]="LLLLLL   OOOOO    GGGGGGG  III  NN    NNNN      UUUUU   SSSSS  EEEEEE  RR   RR ";
+   cetak_judul(a,b,c,d,e);
+
+}
+void judul_user(){
+   hapus_judul();
+	char a[]="UU   UU  SSSSS  EEEEEE  RRRRRR  ";
+   char b[]="UU   UU  SS     EE      RR   RR ";
+   char c[]="UU   UU  SSSSS  EEEEEE  RRRRR   ";
+   char d[]="UU   UU     SS  EE      RR  RR  ";
+   char e[]=" UUUUU   SSSSS  EEEEEE  RR   RR ";
+   cetak_judul(a,b,c,d,e);
+
+}
+void judul_admin(){
+	hapus_judul();
+	char a[]="  AAAA    DDDDD     MM        MM  III  NNNN     NN ";
+   char b[]="AA    AA  DD   DD   MMMM    MMMM  III  NN NN    NN ";
+   char c[]="AAAAAAAA  DD    DD  MM  MM MM MM  III  NN  NN   NN ";
+   char d[]="AA    AA  DD   DD   MM    M   MM  III  NN   NN  NN ";
+   char e[]="AA    AA  DDDDD     MM        MM  III  NN     NNNN ";
+   cetak_judul(a,b,c,d,e);
+}
+
+void judul_daftar_user(){
+	hapus_judul();
+   char a[]="DDDDD      AAAA    FFFFFF  TTTTTTTT    AAAA     RRRR       UU   UU  SSSSSS  EEEEEE   RRRR    ";
+   char b[]="DD  DD   AA    AA  FF         TT     AA    AA  RR   RR     UU   UU  SS      EE      RR   RR  ";
+   char c[]="DD   DD  AAAAAAAA  FFFFFF     TT     AAAAAAAA  RR   RR     UU   UU  SSSSSS  EEEEEE  RR   RR  ";
+   char d[]="DD  DD   AA    AA  FF         TT     AA    AA  RR RR       UU   UU      SS  EE      RR RR    ";
+   char e[]="DDDD     AA    AA  FF         TT     AA    AA  RR   RR      UUUUU   SSSSSS  EEEEEE  RR   RR  ";
+   cetak_judul(a,b,c,d,e);
+
+}
+
+void judul_lihat_data(){
+	hapus_judul();
+   char a[]="LL        III  HH   HH    AAAA    TTTTTTTT     DDDDD      AAAA    TTTTTTTT    AAAA   ";
+   char b[]="LL        III  HH   HH  AA    AA     TT        DD  DD   AA    AA     TT     AA    AA ";
+   char c[]="LL        III  HHHHHHH  AAAAAAAA     TT        DD   DD  AAAAAAAA     TT     AAAAAAAA ";
+   char d[]="LL        III  HH   HH  AA    AA     TT        DD  DD   AA    AA     TT     AA    AA ";
+   char e[]="LLLLLLLL  III  HH   HH  AA    AA     TT        DDDD     AA    AA     TT     AA    AA ";
+   cetak_judul(a,b,c,d,e);
+
+}
+
+void judul_tambah_data(){
+	hapus_judul();
+   char a[]="TTTTTTTT    AAAA    MM          MM  BBBBBBB      AAAA    HH     HH     DDDDD       AAAA    TTTTTTTT    AAAA   ";
+   char b[]="   TT     AA    AA  MMMM      MMMM  BB     BB  AA    AA  HH     HH     DD   DD   AA    AA     TT     AA    AA ";
+   char c[]="   TT     AAAAAAAA  MM  MM  MM  MM  BBBBBBB    AAAAAAAA  HHHHHHHHH     DD    DD  AAAAAAAA     TT     AAAAAAAA ";
+   char d[]="   TT     AA    AA  MM     M    MM  BB     BB  AA    AA  HH     HH     DD   DD   AA    AA     TT     AA    AA ";
+   char e[]="   TT     AA    AA  MM          MM  BBBBBBB    AA    AA  HH     HH      DDDD     AA    AA     TT     AA    AA ";
+   cetak_judul(a,b,c,d,e);
+
+}
+
+void judul_edit_data(){
+	hapus_judul();
+   char a[]="EEEEEE  DDDDD   III  TTTTTTTT     DDDDD       AAAA    TTTTTTTT    AAAA   ";
+   char b[]="EE      DD  DD  III     TT        DD   DD   AA    AA     TT     AA    AA ";
+   char c[]="EEEEEE  DD  DD  III     TT        DD    DD  AAAAAAAA     TT     AAAAAAAA ";
+   char d[]="EE      DD  DD  III     TT        DD   DD   AA    AA     TT     AA    AA ";
+   char e[]="EEEEEE  DDDD    III     TT        DDDDD     AA    AA     TT     AA    AA ";
+   cetak_judul(a,b,c,d,e);
+
+}
+
+void judul_hapus_data(){
+	hapus_judul();
+   char a[]="HH   HH    AAAA    PPPPP    UU    UU  SSSSS     DDDDD       AAAA    TTTTTTTT    AAAA   ";
+   char b[]="HH   HH  AA    AA  PP   PP  UU    UU  SS        DD   DD   AA    AA     TT     AA    AA ";
+   char c[]="HHHHHHH  AAAAAAAA  PPPPPP   UU    UU  SSSSS     DD    DD  AAAAAAAA     TT     AAAAAAAA ";
+   char d[]="HH   HH  AA    AA  PP       UU    UU     SS     DD   DD   AA    AA     TT     AA    AA ";
+   char e[]="HH   HH  AA    AA  PP         UUUU    SSSSS     DDDDD     AA    AA     TT     AA    AA ";
+   cetak_judul(a,b,c,d,e);
+
+}
+
+void judul_cari_data(){
+	hapus_judul();
+   char a[]=" CCCCCC    AAAA    RRRRR     III     DDDDD     AAAA    TTTTTTTT    AAAA   ";
+   char b[]="CC       AA    AA  RR   RR   III     DD  DD  AA    AA     TT     AA    AA ";
+   char c[]="CC       AAAAAAAA  RRRRR     III     DD  DD  AAAAAAAA     TT     AAAAAAAA ";
+   char d[]="CC       AA    AA  RR   RR   III     DD  DD  AA    AA     TT     AA    AA ";
+   char e[]=" CCCCCC  AA    AA  RR    RR  III     DDDD    AA    AA     TT     AA    AA ";
+   cetak_judul(a,b,c,d,e);
+
+}
+
+void judul_logout(){
+	hapus_judul();
+   char a[]="LL           OOOO     GGGGGGG         OOOO     UU    UU     TTTTTTTT   ";
+   char b[]="LL         OO    OO   GG            OO    OO   UU    UU        TT      ";
+   char c[]="LL        OO      OO  GG  GGGG     OO      OO  UU    UU        TT      ";
+   char d[]="LL         OO    OO   GG    GG      OO    OO   UU    UU        TT      ";
+   char e[]="LLLLLLLL     OOOO      GGGGGG         OOOO      UUUUUU         TT      ";
+   cetak_judul(a,b,c,d,e);
+
+}
+
+void tampilan_utama(){
+   textcolor(7);
+   for(int a=2;a<169;a++){
+   	gotoxy(a,2);cprintf("%c",219);
+      gotoxy(a,12);cprintf("%c",219);
+      gotoxy(a,57);cprintf("%c",219);
+      if(a<56){
+      	gotoxy(2,1+a);cprintf("%c",219);
+      	gotoxy(168,1+a);cprintf("%c",219);
+      }
+      if(a<46){
+      	gotoxy(28,11+a);cprintf("%c",219);
+      }
+   }
+   tampilan_utama_down();
+}
+
+void tampilan_utama_garis(int x,int y){
+   textcolor(7);
+	for(int b=0;b<25;b++){
+   	gotoxy(x+b,y);
+      cprintf("%c",219);
+   }
+   Sleep(20);
+}
+void tampilan_utama_up(){
+	textcolor(7);
+   for(int a=0;a<25;a++){
+         for(int b=0;b<25;b++){
+         	gotoxy(3+b,37-a);
+            cprintf("%c",219);
+         } Sleep(20);
+   		gotoxy(3,37-a);printf("                         ");
+   }
+}
+void tampilan_utama_up_copy(){
+	textcolor(7);
+   for(int a=0;a<25;a++){
+         for(int b=0;b<25;b++){
+         	gotoxy(3+b,32-a);
+            cprintf("%c",219);
+         } Sleep(20);
+   		gotoxy(3,32-a);printf("                         ");
+   }
+}
+
+void tampilan_admin_up(){
+	textcolor(7);
+   for(int a=0;a<35;a++){
+         for(int b=0;b<25;b++){
+         	gotoxy(3+b,47-a);
+            cprintf("%c",219);
+         } Sleep(20);
+   		gotoxy(3,47-a);printf("                         ");
+   }
+}
+void tampilan_admin_up_copy(){
+	textcolor(7);
+   for(int a=0;a<30;a++){
+         for(int b=0;b<25;b++){
+         	gotoxy(3+b,42-a);
+            cprintf("%c",219);
+         } Sleep(20);
+   		gotoxy(3,42-a);printf("                         ");
+   }
+}
+
+void tampilan_utama_down_copy(char x[2] ){
+   textcolor(7);
+   for(int a=0;a<=20;a++){
+      	for(int b=0;b<25;b++){
+         	gotoxy(3+b,13+a);
+            cprintf("%c",219);
+         }Sleep(20);
+         gotoxy(3,13+a);printf("                         ");
+   		if(a==5){
+         	if(strcmp(x,"1")==0)textcolor(4);
+            else textcolor(7);
+   			gotoxy(7,15);cprintf("1. LOGIN ADMIN");
+				tampilan_utama_garis(3,17);
+         }
+         if(a==10){
+         	if(strcmp(x,"2")==0)textcolor(4);
+            else textcolor(7);
+            gotoxy(7,20);cprintf("2. LOGIN USER");
+            tampilan_utama_garis(3,22);
+         }
+         if(a==15){
+         	if(strcmp(x,"3")==0)textcolor(4);
+            else textcolor(7);
+  	 			gotoxy(7,25);cprintf("3. DAFTAR USER");
+         	tampilan_utama_garis(3,27);
+         }
+         if(a==20){
+         	if(strcmp(x,"4")==0)textcolor(4);
+            else textcolor(7);
+         	gotoxy(7,30);cprintf("4. KELUAR");
+         	tampilan_utama_garis(3,32);
+         }
+   }
+}
+void pilih_utama(){
+   char menu[2];
+   gotoxy(25,35);gets(menu);
+   if(strcmp(menu,"1")==0){
+   	tampilan_utama_up();
+      tampilan_utama_down_copy("1");
+   	judul_login_admin();
+      login("1");
+   }else if(strcmp(menu,"2")==0){
+   	tampilan_utama_up();
+      tampilan_utama_down_copy("2");
+   	judul_login_user();
+   	login("2");
+   }else if(strcmp(menu,"3")==0){
+   	daftar();
+   }
+   else if(strcmp(menu,"4")==0){
+   	exit(0);
+   }
+   else
+   	pilih_utama();
+}
+void tampilan_utama_down(){
+   textcolor(7);
+   for(int a=0;a<=25;a++){
+      	for(int b=0;b<25;b++){
+         	gotoxy(3+b,13+a);
+            cprintf("%c",219);
+         }Sleep(20);
+         gotoxy(3,13+a);printf("                         ");
+   		if(a==5){
+   			gotoxy(7,15);printf("1. LOGIN ADMIN");
+				tampilan_utama_garis(3,17);
+         }
+         if(a==10){
+            gotoxy(7,20);printf("2. LOGIN USER");
+            tampilan_utama_garis(3,22);
+         }
+         if(a==15){
+  	 			gotoxy(7,25);printf("3. DAFTAR USER");
+         	tampilan_utama_garis(3,27);
+         }
+         if(a==20){
+         	gotoxy(7,30);printf("4. KELUAR");
+         	tampilan_utama_garis(3,32);
+         }
+         if(a==25){
+         	gotoxy(7,35);printf("MASUKAN PILIHAN : ");
+         	tampilan_utama_garis(3,37);
+         }
+   }
+    pilih_utama();
+}
+
+
+void tampilan_admin_down(){
+   clrscrr();
+   textcolor(7);
+   for(int a=0;a<=35;a++){
+      	for(int b=0;b<25;b++){
+         	gotoxy(3+b,13+a);
+            cprintf("%c",219);
+         }Sleep(20);
+         gotoxy(3,13+a);printf("                         ");
+   		if(a==5){
+   			gotoxy(7,15);printf("1. LIHAT DATA");
+				tampilan_utama_garis(3,17);
+         }
+         if(a==10){
+            gotoxy(7,20);printf("2. TAMBAH DATA");
+            tampilan_utama_garis(3,22);
+         }
+         if(a==15){
+  	 			gotoxy(7,25);printf("3. EDIT DATA");
+         	tampilan_utama_garis(3,27);
+         }
+         if(a==20){
+         	gotoxy(7,30);printf("4. HAPUS DATA");
+         	tampilan_utama_garis(3,32);
+         }
+         if(a==25){
+         	gotoxy(7,35);printf("5. CARI DATA");
+         	tampilan_utama_garis(3,37);
+         }
+          if(a==30){
+         	gotoxy(7,40);printf("6. LOG-OUT");
+         	tampilan_utama_garis(3,42);
+         }
+          if(a==35){
+         	gotoxy(7,45);printf("MASUKAN PILIHAN : ");
+         	tampilan_utama_garis(3,47);
+         }
+   }
+   pilih_admin_down();
+
+}
+void tampilan_admin_down_copy(char x[3]){
+   textcolor(7);
+   for(int a=0;a<=30;a++){
+      	for(int b=0;b<25;b++){
+         	gotoxy(3+b,13+a);
+            cprintf("%c",219);
+         }Sleep(20);
+         gotoxy(3,13+a);printf("                         ");
+   		if(a==5){
+         	if(strcmp(x,"1")==0)textcolor(4);
+            else textcolor(7);
+   			gotoxy(7,15);cprintf("1. LIHAT DATA");
+				tampilan_utama_garis(3,17);
+         }
+         if(a==10){
+         	if(strcmp(x,"2")==0)textcolor(4);
+            else textcolor(7);
+            gotoxy(7,20);cprintf("2. TAMBAH DATA");
+            tampilan_utama_garis(3,22);
+         }
+         if(a==15){
+         	if(strcmp(x,"3")==0)textcolor(4);
+            else textcolor(7);
+  	 			gotoxy(7,25);cprintf("3. EDIT DATA");
+         	tampilan_utama_garis(3,27);
+         }
+         if(a==20){
+         	if(strcmp(x,"4")==0)textcolor(4);
+            else textcolor(7);
+         	gotoxy(7,30);cprintf("4. HAPUS DATA");
+         	tampilan_utama_garis(3,32);
+         }
+         if(a==25){
+         	if(strcmp(x,"5")==0)textcolor(4);
+            else textcolor(7);
+         	gotoxy(7,35);cprintf("5. CARI DATA");
+         	tampilan_utama_garis(3,37);
+         }
+          if(a==30){
+         	if(strcmp(x,"6")==0)textcolor(4);
+            else textcolor(7);
+         	gotoxy(7,40);cprintf("6. LOG-OUT");
+         	tampilan_utama_garis(3,42);
+         }
+   }
+}
+void tampilan_user_down(){
+   clrscrr();
+   textcolor(7);
+   for(int a=0;a<=35;a++){
+      	for(int b=0;b<25;b++){
+         	gotoxy(3+b,13+a);
+            cprintf("%c",219);
+         }Sleep(20);
+         gotoxy(3,13+a);printf("                         ");
+   		if(a==5){
+   			gotoxy(5,15);printf("1. DATA PRODUK");
+				tampilan_utama_garis(3,17);
+         }
+         if(a==10){
+            gotoxy(5,20);printf("2. KERANJANG");
+            tampilan_utama_garis(3,22);
+         }
+         if(a==15){
+  	 			gotoxy(5,25);printf("3. EDIT ISI KERANJANG");
+         	tampilan_utama_garis(3,27);
+         }
+         if(a==20){
+         	gotoxy(5,30);printf("4. HAPUS ISI KERANJANG");
+         	tampilan_utama_garis(3,32);
+         }
+         if(a==25){
+         	gotoxy(5,35);printf("5. BAYAR");
+         	tampilan_utama_garis(3,37);
+         }
+          if(a==30){
+         	gotoxy(5,40);printf("6. LOG-OUT");
+         	tampilan_utama_garis(3,42);
+         }
+          if(a==35){
+         	gotoxy(5,45);printf("MASUKAN PILIHAN : ");
+         	tampilan_utama_garis(3,47);
+         }
+   }
+  pilih_user_down();
+}
+
+void tampilan_user_down_copy(char x[3]){
+   clrscrr();
+   textcolor(7);
+   for(int a=0;a<=30;a++){
+      	for(int b=0;b<25;b++){
+         	gotoxy(3+b,13+a);
+            cprintf("%c",219);
+         }Sleep(20);
+         gotoxy(3,13+a);printf("                         ");
+   		if(a==5){
+         	if(strcmp(x,"1")==0)textcolor(4);
+            else textcolor(7);
+   			gotoxy(5,15);cprintf("1. DATA PRODUK");
+				tampilan_utama_garis(3,17);
+         }
+         if(a==10){
+         	if(strcmp(x,"2")==0)textcolor(4);
+            else textcolor(7);
+            gotoxy(5,20);cprintf("2. KERANJANG");
+            tampilan_utama_garis(3,22);
+         }
+         if(a==15){
+         	if(strcmp(x,"3")==0)textcolor(4);
+            else textcolor(7);
+  	 			gotoxy(5,25);cprintf("3. EDIT ISI KERANJANG");
+         	tampilan_utama_garis(3,27);
+         }
+         if(a==20){
+         	if(strcmp(x,"4")==0)textcolor(4);
+            else textcolor(7);
+         	gotoxy(5,30);cprintf("4. HAPUS ISI KERANJANG");
+         	tampilan_utama_garis(3,32);
+         }
+         if(a==25){
+         	if(strcmp(x,"5")==0)textcolor(4);
+            else textcolor(7);
+         	gotoxy(5,35);cprintf("5. BAYAR");
+         	tampilan_utama_garis(3,37);
+         }
+          if(a==30){
+         	if(strcmp(x,"6")==0)textcolor(4);
+            else textcolor(7);
+         	gotoxy(5,40);cprintf("6. LOG-OUT");
+         	tampilan_utama_garis(3,42);
+         }
+   }
+}
+
+void pilih_admin_down(){
+ char menu[2];
+   gotoxy(25,45);gets(menu);
+   if(strcmp(menu,"1")==0){
+   	lihat_barang("1");
+   }else if(strcmp(menu,"2")==0){
+   	tambah_barang();
+   }else if(strcmp(menu,"3")==0){
+   	edit_barang();
+   }
+   else if(strcmp(menu,"4")==0){
+   	hapus_barang();
+   }
+   else if(strcmp(menu,"5")==0){
+   	cari_barang();
+   }
+   else if(strcmp(menu,"6")==0){
+   	tampilan_admin_up();
+      tampilan_utama_down();
+   }
+   pilih_admin_down();
+}
+
+void pilih_user_down(){
+ char menu[2];
+   gotoxy(23,45);gets(menu);
+   if(strcmp(menu,"1")==0){
+   	lihat_barang("2");
+   }else if(strcmp(menu,"2")==0){
+   	tambah_keranjang();
+   }else if(strcmp(menu,"3")==0){
+      edit_keranjang();
+   }
+   else if(strcmp(menu,"4")==0){
+   	hapus_keranjang();
+   }
+   else if(strcmp(menu,"5")==0){
+   }
+   else if(strcmp(menu,"6")==0){
+   	tampilan_admin_up();
+      tampilan_utama_down();
+   }
+   else
+   	  pilih_user_down();
+
+}
+void daftar(){
+	tampilan_utama_up();
+	tampilan_utama_down_copy("3");
+   judul_daftar_user();
+	clrscrr();
+	char nama_lengkap[25];
+   char username[25];
+   char katasandi[25];
+   char katasandi1[25];
+   char no_telephon[12];
+   char email[25];
+   char tempat_lahir[15];
+   char tanggal_lahir[2];
+   char bulan_lahir[2];
+   char tahun_lahir[4];
+	int y=0,x=0;
+   textcolor(7);
+   for(int a=50;a<100;a++){
+		if(a%2==0){
+      	gotoxy(40+y,20);cprintf("%c",219);Sleep(0.5);
+      	gotoxy(40+y,25);cprintf("%c",219);Sleep(0.5);
+      	gotoxy(40+y,30);cprintf("%c",219);Sleep(0.5);
+         gotoxy(40+y,35);cprintf("%c",219);Sleep(0.5);
+         gotoxy(40+y,40);cprintf("%c",219);Sleep(0.5);
+         gotoxy(40+y,45);cprintf("%c",219);Sleep(0.5);
+         gotoxy(95+y,20);cprintf("%c",219);Sleep(0.5);
+      	gotoxy(95+y,25);cprintf("%c",219);Sleep(0.5);
+      	gotoxy(95+y,30);cprintf("%c",219);Sleep(0.5);
+         gotoxy(95+y,35);cprintf("%c",219);Sleep(0.5);
+         gotoxy(95+y,40);cprintf("%c",219);Sleep(0.5);
+         gotoxy(95+y,45);cprintf("%c",219);Sleep(0.5);
+         y++;
+      }
+      else{
+      	gotoxy(89-x,20);cprintf("%c",219);Sleep(0.5);
+        	gotoxy(89-x,25);cprintf("%c",219);Sleep(0.5);
+        	gotoxy(89-x,30);cprintf("%c",219);Sleep(0.5);
+         gotoxy(89-x,35);cprintf("%c",219);Sleep(0.5);
+         gotoxy(89-x,40);cprintf("%c",219);Sleep(0.5);
+         gotoxy(89-x,45);cprintf("%c",219);Sleep(0.5);
+         gotoxy(144-x,20);cprintf("%c",219);Sleep(0.5);
+        	gotoxy(144-x,25);cprintf("%c",219);Sleep(0.5);
+        	gotoxy(144-x,30);cprintf("%c",219);Sleep(0.5);
+         gotoxy(144-x,35);cprintf("%c",219);Sleep(0.5);
+         gotoxy(144-x,40);cprintf("%c",219);Sleep(0.5);
+         gotoxy(144-x,45);cprintf("%c",219);Sleep(0.5);
+         x++;
+      }
+   	if(a<75){
+      	gotoxy(40,-30+a);cprintf("%c",219);Sleep(0.5);
+      	gotoxy(89,-30+a);cprintf("%c",219);Sleep(0.5);
+         gotoxy(95,-30+a);cprintf("%c",219);Sleep(0.5);
+      	gotoxy(144,-30+a);cprintf("%c",219);Sleep(0.5);
+      }
+      if(a>70 && a<95){
+      	gotoxy(60,20+a-70);cprintf("%c",219);Sleep(0.5);
+         gotoxy(115,20+a-70);cprintf("%c",219);Sleep(0.5);
+   	}
+   }
+   gotoxy(42,23);printf("Nama Lengkap");
+   gotoxy(42,28);printf("Username");
+   gotoxy(42,33);printf("Kata Sandi");
+   gotoxy(42,37);printf("Ketik Ulang");
+   gotoxy(45,38);printf("Kata Sandi");
+   gotoxy(42,43);printf("Nomor Telephon");
+   gotoxy(97,23);printf("Email");
+   gotoxy(97,28);printf("Tempat Lahir");
+   gotoxy(97,33);printf("Tanggal Lahir");
+   gotoxy(97,38);printf("Bulan Lahir");
+   gotoxy(97,43);printf("Tahun Lahir");
+
+   gotoxy(63,23); gets(nama_lengkap);
+   gotoxy(63,28); gets(username);
+   gotoxy(63,33); gets(katasandi);
+   gotoxy(63,38); gets(katasandi1);
+   gotoxy(63,43); gets(no_telephon);
+   gotoxy(118,23); gets(email);
+   gotoxy(118,28); gets(tempat_lahir);
+   gotoxy(118,33); gets(tanggal_lahir);
+   gotoxy(118,38); gets(bulan_lahir);
+   gotoxy(118,43); gets(tahun_lahir);
+   input_login(username,katasandi);
+   tampilan_utama_up();
+   tampilan_user_down();
+
+}
+void lihat_barang(int q){
+	textcolor(7);
+	int y=0,x=0,o=8;
+   for(int a=50;a<140;a++){
+		if(a%2==0){
+      	gotoxy(41+y+13,26-o);cprintf("%c",219);Sleep(2);
+      	gotoxy(41+y+13,30-o);cprintf("%c",219);Sleep(2);
+      	gotoxy(41+y+13,30+q-o);cprintf("%c",219);Sleep(2);
+         y++;
+      }
+      else{
+      	gotoxy(130-x+13,26-o);cprintf("%c",219);Sleep(2);
+        	gotoxy(130-x+13,30-o);cprintf("%c",219);Sleep(2);
+        	gotoxy(130-x+13,30+q-o);cprintf("%c",219);Sleep(2);
+         x++;
+      }
+     	if(a<56+q-1){
+      	gotoxy(41+13,-24+a-o);cprintf("%c",219);Sleep(2);
+      	gotoxy(130+13,-24+a-o);cprintf("%c",219);Sleep(2);
+      }
+      if(a>90 && a<96+q-1){
+      	gotoxy(54+13,26+a-90-o);cprintf("%c",219);Sleep(2);
+      	gotoxy(80+13,26+a-90-o);cprintf("%c",219);Sleep(2);
+      	gotoxy(99+13,26+a-90-o);cprintf("%c",219);Sleep(2);
+      	gotoxy(111+13,26+a-90-o);cprintf("%c",219);Sleep(2);
+   	}
+   }
+   gotoxy(43+13,28-o);printf("Id Barang");
+   gotoxy(62+13,28-o);printf("Nama Barang");
+   gotoxy(84+13,28-o);printf("Harga Barang");
+   gotoxy(103+13,28-o);printf("Stock");
+   gotoxy(115+13,28-o);printf("Jenis Barang");
+}
+void get_data_login(){
+	char name[25], psw[25];
+ 	ifstream employe("login.txt");
+   nmr=0;
+ 	while (employe >> name >> psw){
+   	for(int r=0;r<strlen(name);r++)
+   		oop[nmr].Uusername[r]=name[r];
+   	for(int r=0;r<strlen(psw);r++)
+			oop[nmr].Upaswoard[r]=psw[r];
+      nmr++;
+ 	}
+   employe.close();
+}
+void input_login(char name[25],char pasword[25]){
+ ofstream newmember("login.txt",ios::app);
+ newmember << name << ' ' << pasword << endl;
+ newmember.close();
+}
+void login(char zz[3]){
+	clrscrr();
+   textcolor(7);
+	char name[25], psw[25];
+	//char menu;
+   int y=0,x=0;
+   for(int a=50;a<100;a++){
+		if(a%2==0){
+      	gotoxy(50+22+y,25);cprintf("%c",219);Sleep(2);
+      	gotoxy(50+22+y,30);cprintf("%c",219);Sleep(2);
+      	gotoxy(50+22+y,35);cprintf("%c",219);Sleep(2);
+         y++;
+      }
+      else{
+      	gotoxy(99-x+22,25);cprintf("%c",219);Sleep(2);
+        	gotoxy(99-x+22,30);cprintf("%c",219);Sleep(2);
+        	gotoxy(99-x+22,35);cprintf("%c",219);Sleep(2);
+         x++;
+      }
+   	if(a<60){
+      	gotoxy(50+22,-25+a);cprintf("%c",219);Sleep(2);
+      	gotoxy(99+22,-25+a);cprintf("%c",219);Sleep(2);
+      }
+      if(a>90 && a<100){
+      	gotoxy(70+22,25+a-90);cprintf("%c",219);Sleep(2);
+   	}
+   }
+   gotoxy(55+22,28);printf("Username");
+   gotoxy(55+22,33);printf("Passwoard");
+   gotoxy(73+22,28); gets(name);
+   gotoxy(73+22,33); gets(psw);
+   if(strcmp(zz,"1")==0){
+   	if(strcmp(name,"olshop")!=0 || strcmp(psw,"12345")!=0)
+   		login("1");
+      strcpy(kunci,zz);
+      tampilan_utama_up();
+      tampilan_admin_down();
+   }else if(strcmp(zz,"2")==0){
+   	get_data_login();
+      for(int a=0;a<1000;a++){
+      	if(strcmp(name,oop[a].Uusername)==0 && strcmp(psw,oop[a].Upaswoard)==0){
+            strcpy(kunci,zz);
+            tampilan_utama_up();
+         	tampilan_user_down();
+         }
+      }
+      login("2");
+   }
+
+}
+
+void tambah_barang(){
+	tampilan_admin_up();
+   tampilan_admin_down_copy("2");
+	judul_tambah_data();
+	int x=0,y=0;
+   textcolor(7);
+    for(int a=50;a<100;a++){
+		if(a%2==0){
+      	gotoxy(40+y+25,20);cprintf("%c",219);Sleep(0.5);
+      	gotoxy(40+y+25,25);cprintf("%c",219);Sleep(0.5);
+      	gotoxy(40+y+25,30);cprintf("%c",219);Sleep(0.5);
+         gotoxy(40+y+25,35);cprintf("%c",219);Sleep(0.5);
+         gotoxy(40+y+25,40);cprintf("%c",219);Sleep(0.5);
+         gotoxy(40+y+25,45);cprintf("%c",219);Sleep(0.5);
+
+         y++;
+      }
+      else{
+      	gotoxy(89-x+25,20);cprintf("%c",219);Sleep(0.5);
+        	gotoxy(89-x+25,25);cprintf("%c",219);Sleep(0.5);
+        	gotoxy(89-x+25,30);cprintf("%c",219);Sleep(0.5);
+         gotoxy(89-x+25,35);cprintf("%c",219);Sleep(0.5);
+         gotoxy(89-x+25,40);cprintf("%c",219);Sleep(0.5);
+         gotoxy(89-x+25,45);cprintf("%c",219);Sleep(0.5);
+         x++;
+      }
+   	if(a<75){
+      	gotoxy(40+25,-30+a);cprintf("%c",219);Sleep(0.5);
+      	gotoxy(89+25,-30+a);cprintf("%c",219);Sleep(0.5);
+      }
+      if(a>70 && a<95){
+      	gotoxy(60+25,20+a-70);cprintf("%c",219);Sleep(0.5);
+   	}
+   }
+   gotoxy(42+25,23);printf("Id Barang");
+   gotoxy(42+25,28);printf("Nama Barang");
+   gotoxy(42+25,33);printf("Harga Barag");
+   gotoxy(42+25,38);printf("Stock Barang");
+   gotoxy(42+25,43);printf("Jenis Barang");
+   char id[55];
+   char nama_barang[25];
+   char hargi[25];
+   char stoki[25];
+   char jenis[25];
+   int rr;
+   Stock s;
+   gotoxy(63+25,23); gets(id); s.set_id_barang(id);
+   gotoxy(63+25,28); gets(nama_barang); s.set_nama_barang(nama_barang);
+   gotoxy(63+25,33); gets(hargi); rr=atoi(hargi); s.set_harga_barang(double(rr));
+   gotoxy(63+25,38); gets(stoki); rr=atoi(stoki); s.set_stock(double(rr));
+   gotoxy(63+25,43); gets(jenis); s.set_jenis_barang(jenis);
+   s.tambah_stock();
+   tampilan_admin_up_copy();
+   tampilan_admin_down();
+}
+void edit_barang(){
+	tampilan_admin_up();
+   tampilan_admin_down_copy("3");
+	judul_edit_data();
+	int y=0,x=0;
+   textcolor(7);
+	for(int a=50;a<100;a++){
+		if(a%2==0){
+      	gotoxy(40+y,20);cprintf("%c",219);Sleep(0.5);
+      	gotoxy(40+y,25);cprintf("%c",219);Sleep(0.5);
+      	gotoxy(40+y,30);cprintf("%c",219);Sleep(0.5);
+         gotoxy(40+y,35);cprintf("%c",219);Sleep(0.5);
+         gotoxy(40+y,40);cprintf("%c",219);Sleep(0.5);
+         gotoxy(40+y,45);cprintf("%c",219);Sleep(0.5);
+         gotoxy(95+y,20);cprintf("%c",219);Sleep(0.5);
+      	gotoxy(95+y,25);cprintf("%c",219);Sleep(0.5);
+      	gotoxy(95+y,30);cprintf("%c",219);Sleep(0.5);
+         gotoxy(95+y,35);cprintf("%c",219);Sleep(0.5);
+         gotoxy(95+y,40);cprintf("%c",219);Sleep(0.5);
+         gotoxy(95+y,45);cprintf("%c",219);Sleep(0.5);
+         y++;
+      }
+      else{
+      	gotoxy(89-x,20);cprintf("%c",219);Sleep(0.5);
+        	gotoxy(89-x,25);cprintf("%c",219);Sleep(0.5);
+        	gotoxy(89-x,30);cprintf("%c",219);Sleep(0.5);
+         gotoxy(89-x,35);cprintf("%c",219);Sleep(0.5);
+         gotoxy(89-x,40);cprintf("%c",219);Sleep(0.5);
+         gotoxy(89-x,45);cprintf("%c",219);Sleep(0.5);
+         gotoxy(144-x,20);cprintf("%c",219);Sleep(0.5);
+        	gotoxy(144-x,25);cprintf("%c",219);Sleep(0.5);
+        	gotoxy(144-x,30);cprintf("%c",219);Sleep(0.5);
+         gotoxy(144-x,35);cprintf("%c",219);Sleep(0.5);
+         gotoxy(144-x,40);printf("%c",219);Sleep(0.5);
+         gotoxy(144-x,45);cprintf("%c",219);Sleep(0.5);
+         x++;
+      }
+   	if(a<75){
+      	gotoxy(40,-30+a);cprintf("%c",219);Sleep(0.5);
+      	gotoxy(89,-30+a);cprintf("%c",219);Sleep(0.5);
+         gotoxy(95,-30+a);cprintf("%c",219);Sleep(0.5);
+      	gotoxy(144,-30+a);cprintf("%c",219);Sleep(0.5);
+      }
+      if(a>70 && a<95){
+      	gotoxy(60,20+a-70);cprintf("%c",219);Sleep(0.5);
+         gotoxy(115,20+a-70);cprintf("%c",219);Sleep(0.5);
+   	}
+   }
+   gotoxy(42,23);printf("Id Barang");
+   gotoxy(42,28);printf("Nama Barang");
+   gotoxy(42,33);printf("Harga Barag");
+   gotoxy(42,38);printf("Stock Barang");
+   gotoxy(42,43);printf("Jenis Barang");
+   gotoxy(97,23);printf("Id Barang");
+   gotoxy(97,28);printf("Nama Barang");
+   gotoxy(97,33);printf("Harga Barag");
+   gotoxy(97,38);printf("Stock Barang");
+   gotoxy(97,43);printf("Jenis Barang");
+   gotoxy(43,17);printf("DATA LAMA");
+   gotoxy(98,17);printf("DATA BARU");
+   char id[55];
+   char id1[55];
+   char nama_barang[25];
+   char hargi[25];
+   char stoki[25];
+   char jenis[25];
+   gotoxy(118,23); gets(id);
+   ifstream employee("stock.txt");
+   while (employee >> id1 >> nama_barang >> hargi >> stoki >> jenis){
+   	if(strcmp(id,id1)==0){
+   		gotoxy(63,23); printf("%s",id1);
+      	gotoxy(63,28); printf("%s",nama_barang);
+   		gotoxy(63,33); printf("%s",hargi);
+   		gotoxy(63,38); printf("%s",stoki);
+   		gotoxy(63,43); printf("%s",jenis);
+         break;
+      }
+	}
+   employee.close();
+   gotoxy(118,28); gets(nama_barang);
+   gotoxy(118,33); gets(hargi);
+   gotoxy(118,38); gets(stoki);
+   gotoxy(118,43); gets(jenis);
+   Stock s;
+   double yw=atoi(hargi);
+   double q=atoi(stoki);
+   s.edit_stock(id,nama_barang,yw,q,jenis);
+   tampilan_admin_up_copy();
+   tampilan_admin_down();
+
+}
+void hapus_barang(){
+	tampilan_admin_up();
+   tampilan_admin_down_copy("4");
+	judul_hapus_data();
+   char id[5];
+   gotoxy(70,28);printf("ID BARANG :");
+   textcolor(7);
+	for(int x=0;x<=50;x++){
+   	gotoxy(70+x,30);cprintf("%c",219);Sleep(0.5);
+      gotoxy(70+x,34);cprintf("%c",219);Sleep(0.5);
+   	if(x>46){
+      	gotoxy(70,30+x-46);cprintf("%c",219);Sleep(0.5);
+         gotoxy(120,30+x-46);cprintf("%c",219);Sleep(0.5);
+
+      }
+   }
+   gotoxy(82,32); gets(id);
+   Stock s;
+   s.hapus_stock(id);
+   tampilan_admin_up_copy();
+   tampilan_admin_down();
+}
+void hapus_keranjang(){
+	tampilan_admin_up();
+   tampilan_user_down_copy("4");
+	judul_hapus_data();
+   char id[5];
+   gotoxy(70,28);printf("ID BARANG :");
+   textcolor(7);
+	for(int x=0;x<=50;x++){
+   	gotoxy(70+x,30);cprintf("%c",219);Sleep(0.5);
+      gotoxy(70+x,34);cprintf("%c",219);Sleep(0.5);
+   	if(x>46){
+      	gotoxy(70,30+x-46);cprintf("%c",219);Sleep(0.5);
+         gotoxy(120,30+x-46);cprintf("%c",219);Sleep(0.5);
+
+      }
+   }
+   gotoxy(82,32); gets(id);
+   tampilan_admin_up_copy();
+   tampilan_user_down();
+}
+void cari_barang(){
+	tampilan_admin_up();
+   tampilan_admin_down_copy("5");
+	judul_cari_data();
+   char id[5];
+   gotoxy(70,15);printf("ID BARANG :");
+   textcolor(7);
+	for(int x=0;x<=50;x++){
+   	gotoxy(70+x,17);cprintf("%c",219);Sleep(0.5);
+      gotoxy(70+x,19);cprintf("%c",219);Sleep(0.5);
+   	if(x>48){
+      	gotoxy(70,17+x-48);cprintf("%c",219);Sleep(0.5);
+         gotoxy(120,17+x-48);cprintf("%c",219);Sleep(0.5);
+
+      }
+   }
+   gotoxy(82,18.5); gets(id);
+   Stock s;
+   clrscrr();
+   s.cari_id(id);
+   tampilan_admin_up_copy();
+   tampilan_admin_down();
+}
+void edit_keranjang(){
+	tampilan_admin_up();
+   tampilan_user_down_copy("3");
+	judul_edit_data();
+	int y=0,x=0;
+   textcolor(7);
+	for(int a=50;a<100;a++){
+		if(a%2==0){
+      	gotoxy(40+y,20);cprintf("%c",219);Sleep(0.5);
+      	gotoxy(40+y,25);cprintf("%c",219);Sleep(0.5);
+      	gotoxy(40+y,30);cprintf("%c",219);Sleep(0.5);
+         gotoxy(40+y,35);cprintf("%c",219);Sleep(0.5);
+         gotoxy(40+y,40);cprintf("%c",219);Sleep(0.5);
+         y++;
+      }
+      else{
+      	gotoxy(89-x,20);cprintf("%c",219);Sleep(0.5);
+        	gotoxy(89-x,25);cprintf("%c",219);Sleep(0.5);
+        	gotoxy(89-x,30);cprintf("%c",219);Sleep(0.5);
+         gotoxy(89-x,35);cprintf("%c",219);Sleep(0.5);
+         gotoxy(89-x,40);cprintf("%c",219);Sleep(0.5);
+         x++;
+      }
+   	if(a<70){
+      	gotoxy(40,-30+a);cprintf("%c",219);Sleep(0.5);
+      	gotoxy(89,-30+a);cprintf("%c",219);Sleep(0.5);
+      }
+      if(a>75 && a<95){
+      	gotoxy(61,20+a-75);cprintf("%c",219);Sleep(0.5);
+   	}
+   }
+   gotoxy(42,23);printf("Id Barang");
+   gotoxy(42,28);printf("Nama Barang");
+   gotoxy(42,33);printf("Harga Barag");
+   gotoxy(42,38);printf("jumlah Yang Dibeli");
+   gotoxy(43,17);printf("DATA BARANG");
+   char id[55];
+   char nama_barang[25];
+   char hargi[25];
+   char stoki[25];
+   char jumlah[25];
+   gotoxy(63,23); gets(id);
+   gotoxy(63,38); gets(jumlah);
+   tampilan_admin_up_copy();
+   tampilan_user_down();
+
+}
+
+void tambah_keranjang(){
+	tampilan_admin_up();
+   tampilan_user_down_copy("2");
+	judul_cari_data();
+   char id[5];
+   char jumlah[5];
+   gotoxy(70,15);printf("ID BARANG :");
+   gotoxy(70,23);printf("JUMLAH BARANG :");
+
+   textcolor(7);
+	for(int x=0;x<=50;x++){
+   	gotoxy(70+x,17);cprintf("%c",219);Sleep(0.5);
+      gotoxy(70+x,19);cprintf("%c",219);Sleep(0.5);
+      gotoxy(70+x,25);cprintf("%c",219);Sleep(0.5);
+      gotoxy(70+x,27);cprintf("%c",219);Sleep(0.5);
+   	if(x>48){
+      	gotoxy(70,17+x-48);cprintf("%c",219);Sleep(0.5);
+         gotoxy(120,17+x-48);cprintf("%c",219);Sleep(0.5);
+         gotoxy(70,25+x-48);cprintf("%c",219);Sleep(0.5);
+         gotoxy(120,25+x-48);cprintf("%c",219);Sleep(0.5);
+
+      }
+   }
+   gotoxy(82,18.5); gets(id);
+   gotoxy(82,26); gets(jumlah);
+   tampilan_admin_up_copy();
+   tampilan_user_down();
+}
+void lihat_barang(char x[3]){
+	l=0;
+	tampilan_admin_up();
+   if(strcmp(x,"1")==0)tampilan_admin_down_copy("1");
+   else if(strcmp(x,"2")==0)tampilan_user_down_copy("1");
+   judul_lihat_data();
+   Stock s;
+   s.lihat_stock();
+   getch();
+   tampilan_admin_up_copy();
+   if(strcmp(x,"1")==0){
+   	tampilan_admin_down();
+   }else if(strcmp(x,"2")==0)
+   tampilan_user_down();
+}
+
+void asci(){
+	for(int a=0;a<250;a++){
+     	printf("%d = %c\t",a+1,a);
+      if(a%50==0)printf("\n");
+     }
+}
+void warna(){
+	for(int a=0;a<30;a++){
+     	gotoxy(1,a+1);textcolor(a); cprintf("%d",a);
+   }
+}
+main(){
+   tampilan_utama();
+   //warna();
+getch();
+}
